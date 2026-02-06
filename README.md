@@ -10,7 +10,7 @@ DeepRead is a document-structure-aware RAG Agent. This repo already includes the
 
 ## Highlights
 - Structure-aware parsing: preserves headings, tables, and images from Markdown into hierarchical nodes.
-- Multi-stage retrieval: BM25 / Regex / Vector / Hybrid / Semantic pipeline with configurable top-k.
+- Multi tools for retrieval: BM25 / Regex / Vector / Hybrid / Semantic pipeline with configurable top-k.
 - Neighbor-window reading: expand retrieved nodes with structural context.
 - Optional multimodal reads: image blocks can be surfaced to the model (`--enable-multimodal`).
 - Tool-call fallback parsing: robust handling of tool calls in multiple formats.
