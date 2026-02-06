@@ -23,15 +23,38 @@ DeepRead is a document-structure-aware RAG Agent. This repo already includes the
 - `Demo/金山办公2023年报/`: demo corpus + embeddings.
 
 ## Quickstart
+### 0) Set API Environment Variables
+Set these before running `DeepRead.py` (adjust to your provider):
+```bash
+# LLM (choose one provider)
+export OPENAI_API_KEY="<YOUR_OPENAI_KEY>"
+# or
+export OPENROUTER_API_KEY="<YOUR_OPENROUTER_KEY>"
+
+# override base URL / model
+export OPENAI_BASE_URL="https://api.openai.com/v1"
+export OPENAI_MODEL="gpt-4o"
+
+# Optional: Embedding service
+export EMBED_API_KEY="<YOUR_EMBEDDING_KEY>"
+export EMBED_BASE_URL="http://127.0.0.1:8756/v1"
+export EMBEDDING_MODEL="Qwen/Qwen3-Embedding-8B"
+
+# Optional: Reranker service (for semantic retrieval)
+export RERANK_API_KEY="<YOUR_RERANK_KEY>"
+export RERANK_BASE_URL="https://api.siliconflow.cn/v1"
+export RERANK_MODEL="Qwen/Qwen3-Reranker-8B"
+```
+
 ### 1) Start PaddleOCRVL server for PDF OCR
-If you want to parse PDFs, start the OCR server first:
+If you want to parse PDFs, please read the PaddleOCRVL setup first, then start the OCR server:
+https://huggingface.co/PaddlePaddle/PaddleOCR-VL
+
+We use the official PaddleOCRVL Docker image published by PaddlePaddle. The launcher is provided in `Code/paddleocr.sh`. Run:
 ```bash
 bash Code/paddleocr.sh
 ```
 By default it exposes `http://127.0.0.1:8956/v1`.
-PaddleOCRVL environment reference:
-https://huggingface.co/PaddlePaddle/PaddleOCR-VL  
-This project uses the official Docker image in `Code/paddleocr.sh`.
 
 ### 2) PDF -> Corpus (Structure-Aware)
 ```bash
@@ -54,12 +77,6 @@ This produces:
 - `*_emb.npy` + `*_idmap.json` (optional vector store)
 
 ### 3) Ask Questions with DeepRead
-Set your LLM API config:
-```bash
-export OPENAI_API_KEY="<YOUR_OPENAI_KEY>"
-# or: export OPENROUTER_API_KEY="<YOUR_OPENROUTER_KEY>"
-export OPENAI_MODEL="gpt-4o"
-```
 Run:
 ```bash
 python Code/DeepRead.py \
