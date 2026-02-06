@@ -106,7 +106,7 @@ python Code/DeepRead.py \
   --log demo_trading.jsonl
 ```
 
-### Demo 2: 斗破苍穹
+### Demo 2: 金山办公23年年报
 ```bash
 python Code/DeepRead.py \
   --doc "Demo/金山办公2023年报/11724-金山办公：金山办公2023年年度报告_corpus.json" \
