@@ -23,7 +23,7 @@ DeepRead is a document-structure-aware RAG Agent. This repo already includes the
 - `Demo/金山办公2023年报/`: demo corpus + embeddings.
 
 ## Quickstart
-### 1) (Optional) Start PaddleOCRVL server for PDF OCR
+### 1) Start PaddleOCRVL server for PDF OCR
 If you want to parse PDFs, start the OCR server first:
 ```bash
 bash Code/paddleocr.sh
