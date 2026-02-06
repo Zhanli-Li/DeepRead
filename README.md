@@ -6,4 +6,153 @@
     <img src="fig/DeepRead.png" alt="HDReAct paper" width="100%">
 </div>
 
-The detailed implementation will be available very soon!
+DeepRead is a document-structure-aware agentic search pipeline. This repo already includes the core parsing, indexing, retrieval, and agent runtime used in the demo.
+
+## Highlights
+- Structure-aware parsing: preserves headings, tables, and images from Markdown into hierarchical nodes.
+- Multi-stage retrieval: BM25 / Regex / Vector / Hybrid / Semantic pipeline with configurable top-k.
+- Neighbor-window reading: expand retrieved nodes with structural context.
+- Optional multimodal reads: image blocks can be surfaced to the model (`--enable-multimodal`).
+- Tool-call fallback parsing: robust handling of tool calls in multiple formats.
+
+## Repository Layout
+- `Code/DeepRead.py`: agent runtime + retrieval + tool calls.
+- `Code/parser_pdf.py`: PDF -> OCR (PaddleOCRVL) -> merged Markdown/JSON -> corpus; optional embeddings.
+- `Code/paddleocr.sh`: Docker-based PaddleOCRVL vLLM server runner.
+- `Demo/TradingAgent/`: demo corpus + embeddings (with images).
+- `Demo/斗破苍穹 (天蚕土豆) (Z-Library)/`: demo corpus + embeddings.
+
+## Quickstart
+### 1) (Optional) Start PaddleOCRVL server for PDF OCR
+If you want to parse PDFs, start the OCR server first:
+```bash
+bash Code/paddleocr.sh
+```
+By default it exposes `http://127.0.0.1:8956/v1`.
+PaddleOCRVL environment reference:
+https://huggingface.co/PaddlePaddle/PaddleOCR-VL  
+This project uses the official Docker image in `Code/paddleocr.sh`.
+
+### 2) PDF -> Corpus (Structure-Aware)
+```bash
+python Code/parser_pdf.py \
+  --input /path/to/your.pdf \
+  --output /path/to/output_dir
+```
+Optional embeddings (requires an embedding API server):
+```bash
+python Code/parser_pdf.py \
+  --input /path/to/your.pdf \
+  --output /path/to/output_dir \
+  --build-embeddings \
+  --embedding-model Qwen/Qwen3-Embedding-8B \
+  --embed-base-url http://127.0.0.1:8756/v1 \
+  --embed-api-key <YOUR_KEY>
+```
+This produces:
+- `*_corpus.json` (structured nodes)
+- `*_emb.npy` + `*_idmap.json` (optional vector store)
+
+### 3) Ask Questions with DeepRead
+Set your LLM API config:
+```bash
+export OPENAI_API_KEY="<YOUR_OPENAI_KEY>"
+# or: export OPENROUTER_API_KEY="<YOUR_OPENROUTER_KEY>"
+export OPENAI_MODEL="gpt-4o"
+```
+Run:
+```bash
+python Code/DeepRead.py \
+  --doc /path/to/output_dir/your_corpus.json \
+  --question "What is your question?" \
+  --enable-semantic \
+  --neighbor-window 1,-1 \
+  --log run_log.jsonl
+```
+
+### 4) Recommended Retrieval Modes
+Choose a retrieval mode based on your service availability:
+- **No Embedding API**: use BM25 (available by default, no extra flags)
+  ```bash
+  python Code/DeepRead.py --doc /path/to/your_corpus.json --question "..." --log run_log.jsonl
+  ```
+- **Embedding API only (no reranker)**: use Vector retrieval
+  ```bash
+  python Code/DeepRead.py \
+    --doc /path/to/your_corpus.json \
+    --question "..." \
+    --enable-vector \
+    --disable-bm25 \
+    --disable-regex \
+    --log run_log.jsonl
+  ```
+- **Embedding + Reranker**: use Semantic retrieval (vector recall + rerank)
+  ```bash
+  python Code/DeepRead.py \
+    --doc /path/to/your_corpus.json \
+    --question "..." \
+    --enable-semantic \
+    --log run_log.jsonl
+  ```
+
+## Demo
+### Demo 1: TradingAgent (multimodal + embeddings)
+```bash
+python Code/DeepRead.py \
+  --doc "Demo/TradingAgent/TradingAgent_corpus.json" \
+  --question "Which roles are included in the overall TradingAgents framework?" \
+  --enable-semantic \
+  --enable-multimodal \
+  --log demo_trading.jsonl
+```
+
+### Demo 2: 斗破苍穹
+```bash
+python Code/DeepRead.py \
+  --doc "Demo/斗破苍穹 (天蚕土豆) (Z-Library)/斗破苍穹 (天蚕土豆) (Z-Library)_corpus.json" \
+  --question "萧氏灭族之后，萧炎是否找到了当时的祖先？共有多少人？" \
+  --enable-semantic \
+  --neighbor-window 0,0 \
+  --log demo_xx.jsonl
+```
+
+## Full Usage
+### DeepRead.py
+All options:
+```bash
+python Code/DeepRead.py --help
+```
+Common flags:
+- Input/basics: `--doc`, `--question`, `--log`, `--max_rounds`, `--temperature`
+- Retrieval toggles: `--enable-vector`, `--enable-hybrid`, `--enable-semantic`, `--disable-bm25`, `--disable-regex`, `--disable-read`
+- Semantic retrieval: `--semantic-stage1` (vector/bm25/hybrid), `--semantic-topk1`, `--semantic-topk2`
+- Neighbor window: `--neighbor-window up,down`
+- Multimodal: `--enable-multimodal`
+- Embedding: `--embedding-model`, `--embed-base-url`, `--embed-api-key`
+- Rerank: `--rerank-api-key`, `--rerank-base-url`, `--rerank-model`
+
+### parser_pdf.py
+All options:
+```bash
+python Code/parser_pdf.py --help
+```
+Common flags:
+- Input/output: `--input` (PDF), `--output`
+- OCR server: `--paddle-vl-rec-backend`, `--paddle-vl-rec-server-url`
+- Embedding: `--build-embeddings`, `--embedding-model`, `--embedding-batch-size`, `--embed-base-url`, `--embed-api-key`
+
+## Configuration Reference
+DeepRead reads from environment variables and CLI flags:
+- LLM: `OPENAI_API_KEY` / `OPENROUTER_API_KEY`, `OPENAI_BASE_URL` / `OPENROUTER_BASE_URL`, `OPENAI_MODEL`
+- Embedding: `EMBED_API_KEY`, `EMBED_BASE_URL`, `EMBEDDING_MODEL`
+- Rerank (optional): `RERANK_API_KEY` or `SILICONFLOW_API_KEY`, `RERANK_BASE_URL`, `RERANK_MODEL`
+- Retrieval: `--enable-vector`, `--enable-hybrid`, `--enable-semantic`, `--disable-bm25`, `--disable-regex`, `--disable-read`
+- Neighbor window: `--neighbor-window up,down` (e.g. `1,-1`, `0,0` disables)
+
+## Notes
+- `parser_pdf.py` currently accepts PDF only.
+- OCR requires `paddleocr` and `PaddleOCRVL` (or run the provided Docker server).
+- `tiktoken` is optional; if missing, token counting falls back to a simple tokenizer.
+
+## License
+See `LICENSE`.
