@@ -1,7 +1,7 @@
 # DeepRead
 
 **[Zhanli Li](https://zhanli-li.github.io)**, Huiwen Tian, Lvzhou Luo, [Yixuan Cao](https://yixuancao.github.io/), [Ping Luo](https://ping-luo.github.io/).  
-  [**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://zhanli-li.github.io)
+  [**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://arxiv.org/abs/2602.05014)
 <div style="text-align:center;">
     <img src="fig/DeepRead.png" alt="HDReAct paper" width="100%">
 </div>
@@ -20,7 +20,7 @@ DeepRead is a document-structure-aware agentic search pipeline. This repo alread
 - `Code/parser_pdf.py`: PDF -> OCR (PaddleOCRVL) -> merged Markdown/JSON -> corpus; optional embeddings.
 - `Code/paddleocr.sh`: Docker-based PaddleOCRVL vLLM server runner.
 - `Demo/TradingAgent/`: demo corpus + embeddings (with images).
-- `Demo/斗破苍穹 (天蚕土豆) (Z-Library)/`: demo corpus + embeddings.
+- `Demo/金山办公2023年报/`: demo corpus + embeddings.
 
 ## Quickstart
 ### 1) (Optional) Start PaddleOCRVL server for PDF OCR
@@ -109,8 +109,8 @@ python Code/DeepRead.py \
 ### Demo 2: 斗破苍穹
 ```bash
 python Code/DeepRead.py \
-  --doc "Demo/斗破苍穹 (天蚕土豆) (Z-Library)/斗破苍穹 (天蚕土豆) (Z-Library)_corpus.json" \
-  --question "萧氏灭族之后，萧炎是否找到了当时的祖先？共有多少人？" \
+  --doc "Demo/金山办公2023年报/11724-金山办公：金山办公2023年年度报告_corpus.json" \
+  --question "公司有哪些累计投入金额超过一亿元的在研项目？" \
   --enable-semantic \
   --neighbor-window 0,0 \
   --log demo_xx.jsonl
