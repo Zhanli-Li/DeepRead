@@ -6,7 +6,7 @@
     <img src="fig/DeepRead.png" alt="HDReAct paper" width="100%">
 </div>
 
-DeepRead is a document-structure-aware agentic search pipeline. This repo already includes the core parsing, indexing, retrieval, and agent runtime used in the demo.
+DeepRead is a document-structure-aware RAG Agent. This repo already includes the core parsing, indexing, retrieval, and agent runtime used in the demo.
 
 ## Highlights
 - Structure-aware parsing: preserves headings, tables, and images from Markdown into hierarchical nodes.
