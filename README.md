@@ -1,7 +1,6 @@
 # DeepRead
 
-**[Zhanli Li](https://zhanli-li.github.io)**, Huiwen Tian, Lvzhou Luo, [Yixuan Cao](https://yixuancao.github.io/), [Ping Luo](https://ping-luo.github.io/).  
-  [**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://arxiv.org/abs/2602.05014)
+[**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://arxiv.org/abs/2602.05014)
 <div style="text-align:center;">
     <img src="fig/DeepRead.png" alt="HDReAct paper" width="100%">
 </div>
