@@ -1,6 +1,6 @@
 # DeepRead
 
-[**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://arxiv.org/abs/2602.05014)
+[**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://zhanli-li.github.io/)
 <div style="text-align:center;">
     <img src="fig/DeepRead.png" alt="HDReAct paper" width="100%">
 </div>
