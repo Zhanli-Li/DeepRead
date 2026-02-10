@@ -170,5 +170,7 @@ DeepRead reads from environment variables and CLI flags:
 - OCR requires `paddleocr` and `PaddleOCRVL` (or run the provided Docker server).
 - `tiktoken` is optional; if missing, token counting falls back to a simple tokenizer.
 
+Related Outstanding Work:  [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR), [PageIndex](https://github.com/VectifyAI/PageIndex)
+
 ## License
 See `LICENSE`.
