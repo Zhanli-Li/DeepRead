@@ -5,7 +5,7 @@
     <a href="https://github.com/Zhanli-Li/DeepRead/blob/main/LICENSE">
         <img height="21" src="https://img.shields.io/badge/License-Apache--2.0-ffffff?labelColor=d4eaf7&color=2e6cc4" alt="license">
     </a>
-    <a href="https://deepwiki.com/Like0x/DeepRead"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+    <a href="https://deepwiki.com/Zhanli-Li/DeepRead"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 <div style="text-align:center;">
     <img src="fig/DeepRead.png" alt="main fig" width="100%">
