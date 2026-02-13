@@ -1891,7 +1891,7 @@ if __name__ == "__main__":
     parser.add_argument("--semantic-stage1-hybrid-topk-bm25", type=int, default=int(os.getenv("SEMANTIC_STAGE1_HYBRID_TOPK_BM25", "30")))
     parser.add_argument("--semantic-stage1-hybrid-topk-vec", type=int, default=int(os.getenv("SEMANTIC_STAGE1_HYBRID_TOPK_VEC", "30")))
 
-    parser.add_argument("--rerank-api-key", type=str, default=os.getenv("SILICONFLOW_API_KEY", "") or os.getenv("RERANK_API_KEY", ""))
+    parser.add_argument("--rerank-api-key", type=str, default=os.getenv("RERANK_API_KEY", "") or os.getenv("RERANK_API_KEY", ""))
     parser.add_argument("--rerank-base-url", type=str, default=os.getenv("RERANK_BASE_URL", "https://api.siliconflow.cn/v1"))
     parser.add_argument("--rerank-model", type=str, default=os.getenv("RERANK_MODEL", "Qwen/Qwen3-Reranker-8B"))
 
@@ -1922,7 +1922,7 @@ if __name__ == "__main__":
     if base_url and "openrouter.ai" in base_url:
         default_headers = {"HTTP-Referer": os.getenv("ORIGIN", "http://localhost"), "X-Title": os.getenv("APP_NAME", "doc-agent")}
 
-    model = os.getenv("OPENAI_MODEL") or ("openai/gpt-4o" if (base_url and "openrouter.ai" in base_url) else "gpt-4o")
+    model = os.getenv("OPENAI_MODEL") or os.getenv("OPENROUTER_MODEL")
 
     logger = JsonlLogger(args.log)
     doc_index = load_corpus(args.doc, neighbor_window=neighbor_window_arg)

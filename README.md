@@ -1,18 +1,17 @@
-# DeepRead
+# DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search
 
-[**DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search**](https://arxiv.org/pdf/2602.05014v1)
+<p align="center">
+    <a href='https://arxiv.org/abs/2602.05014'><img src='https://img.shields.io/badge/arXiv-2602.05014-b31b1b'></a>
+    <a href="https://github.com/Zhanli-Li/DeepRead/blob/main/LICENSE">
+        <img height="21" src="https://img.shields.io/badge/License-Apache--2.0-ffffff?labelColor=d4eaf7&color=2e6cc4" alt="license">
+    </a>
+    <a href="https://deepwiki.com/Like0x/DeepRead"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+</p>
 <div style="text-align:center;">
-    <img src="fig/DeepRead.png" alt="HDReAct paper" width="100%">
+    <img src="fig/DeepRead.png" alt="main fig" width="100%">
 </div>
 
 DeepRead is a document-structure-aware RAG Agent. This repo already includes the core parsing, indexing, retrieval, and agent runtime used in the demo.
-
-## Highlights
-- Structure-aware parsing: preserves headings, tables, and images from Markdown into hierarchical nodes.
-- Multi tools for retrieval: BM25 / Regex / Vector / Hybrid / Semantic pipeline with configurable top-k.
-- Neighbor-window reading: expand retrieved nodes with structural context.
-- Optional multimodal reads: image blocks can be surfaced to the model (`--enable-multimodal`).
-- Tool-call fallback parsing: robust handling of tool calls in multiple formats.
 
 ## Repository Layout
 - `Code/DeepRead.py`: agent runtime + retrieval + tool calls.
@@ -25,14 +24,10 @@ DeepRead is a document-structure-aware RAG Agent. This repo already includes the
 ### 0) Set API Environment Variables
 Set these before running `DeepRead.py` (adjust to your provider):
 ```bash
-# LLM (choose one provider)
-export OPENAI_API_KEY="<YOUR_OPENAI_KEY>"
-# or
+# LLM
 export OPENROUTER_API_KEY="<YOUR_OPENROUTER_KEY>"
-
-# override base URL / model
-export OPENAI_BASE_URL="https://api.openai.com/v1"
-export OPENAI_MODEL="gpt-4o"
+export OPENROUTER_BASE_URL="https://api.openai.com/v1"
+export OPENROUTER_MODEL="gpt-4o"
 
 # Optional: Embedding service
 export EMBED_API_KEY="<YOUR_EMBEDDING_KEY>"
@@ -46,14 +41,12 @@ export RERANK_MODEL="Qwen/Qwen3-Reranker-8B"
 ```
 
 ### 1) Start PaddleOCRVL server for PDF OCR
-If you want to parse PDFs, please read the PaddleOCRVL setup first, then start the OCR server:
-https://huggingface.co/PaddlePaddle/PaddleOCR-VL
 
-We use the official PaddleOCRVL Docker image published by PaddlePaddle. The launcher is provided in `Code/paddleocr.sh`. Run:
+We use the official [PaddleOCRVL](https://huggingface.co/PaddlePaddle/PaddleOCR-VL) Docker image published by PaddlePaddle, and it based on VLLM. The launcher is provided in `Code/paddleocr.sh`. Run:
 ```bash
 bash Code/paddleocr.sh
 ```
-By default it exposes `http://127.0.0.1:8956/v1`.
+By default it exposes `http://127.0.0.1:8956/v1`, and our PDF parsing code will call this port by default.
 
 ### 2) PDF -> Corpus (Structure-Aware)
 ```bash
@@ -169,8 +162,21 @@ DeepRead reads from environment variables and CLI flags:
 - `parser_pdf.py` currently accepts PDF only.
 - OCR requires `paddleocr` and `PaddleOCRVL` (or run the provided Docker server).
 - `tiktoken` is optional; if missing, token counting falls back to a simple tokenizer.
+ 
+## Related Work
 
 Related Outstanding Work:  [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR), [PageIndex](https://github.com/VectifyAI/PageIndex)
 
+## Citation
+If DeepRead is helpful for you, please cite us.
+```
+@article{li2026deepread,
+  title={DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search},
+  author={Li, Zhanli and Tian, Huiwen and Luo, Lvzhou and Cao, Yixuan and Luo, Ping},
+  journal={arXiv preprint arXiv:2602.05014},
+  year={2026}
+}
+```
+
 ## License
-See `LICENSE`.
+See [LICENSE](DeepRead/LICENSE).
