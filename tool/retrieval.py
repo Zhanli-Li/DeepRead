@@ -18,7 +18,6 @@ class DocIndex:
     def __init__(self, nodes: List[Dict[str, Any]], neighbor_window: Optional[Tuple[int, int]]) -> None:
         self.neighbor_window: Optional[Tuple[int, int]] = _normalize_neighbor_window(neighbor_window)
 
-        self.nodes: Dict[str, Dict[str, Any]] = {}
         self.nodes_by_doc: Dict[str, Dict[str, Any]] = {}
 
         for node in nodes:
@@ -42,14 +41,8 @@ class DocIndex:
             node["_tokens"] = simple_tokenize(full_text)
             node["_model_token_count"] = count_model_tokens(full_text)
 
-            self.nodes[node_id] = node
             self.nodes_by_doc.setdefault(doc_id, {})
             self.nodes_by_doc[doc_id][node_id] = node
-
-        self.node_to_doc_id: Dict[str, str] = {}
-        for doc_id, doc_nodes in self.nodes_by_doc.items():
-            for node_id in doc_nodes.keys():
-                self.node_to_doc_id[str(node_id)] = str(doc_id)
 
         self.par_docs: List[Dict[str, Any]] = []
         for doc_id, doc_nodes in self.nodes_by_doc.items():

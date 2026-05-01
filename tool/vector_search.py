@@ -66,7 +66,7 @@ def vector_search(
         idxs = [
             i
             for i, meta in enumerate(doc_index._vec_idmap)
-            if str(meta.get("doc_id") or doc_index.node_to_doc_id.get(str(meta.get("node_id")), "")) == did
+            if str(meta.get("doc_id", "")) == did
         ]
         if not idxs:
             return {
@@ -94,7 +94,7 @@ def vector_search(
         global_idx = idxs[int(rank)]
         meta = doc_index._vec_idmap[global_idx]
         nid = str(meta.get("node_id"))
-        did = str(meta.get("doc_id") or doc_index.node_to_doc_id.get(nid, ""))
+        did = str(meta.get("doc_id", ""))
         paragraph_index = int(meta.get("paragraph_index", 0))
 
         node = (doc_index.nodes_by_doc.get(did) or {}).get(nid) or {"paragraphs": []}
